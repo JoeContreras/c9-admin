@@ -28,6 +28,9 @@ const Header = () => {
             <Link to="/profile">Profile</Link>
           </li>
           <li>
+            <Link to="/adminClientes">Administrar Clientes</Link>
+          </li>
+          <li>
             <Link to="/" onClick={handleLogout}>
               Logout
             </Link>

@@ -10,6 +10,8 @@ import ResetPassword from "./auth/ResetPassword";
 import Profile from "./profile/Profile";
 import EditUser from "./profile/EditUser";
 import Home from "./home/Home";
+import Clientes from "./profile/Clientes";
+import EditCliente from "./profile/EditCliente";
 
 const Body = () => {
   const auth = useSelector((state) => state.auth);
@@ -42,6 +44,16 @@ const Body = () => {
         <Route
           path="/edit_user/:id"
           component={isAdmin ? EditUser : NotFound}
+          exact
+        />
+        <Route
+          path="/cliente-update/:id"
+          component={isLogged ? EditCliente : Login}
+          exact
+        />
+        <Route
+          path="/adminClientes"
+          component={isLogged ? Clientes : Login}
           exact
         />
         <Route

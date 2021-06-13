@@ -8,7 +8,7 @@ const ClienteCtrl = {
 
     try {
       await cliente.save();
-      res.status(201).send(cliente).json({ msg: "Cliente creado" });
+      res.json({ msg: "Cliente creado" });
     } catch (err) {
       return res.status(400).json({ msg: err.message });
     }
