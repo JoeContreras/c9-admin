@@ -7,31 +7,31 @@ import {
 } from "../../utils/notification/Notification";
 import { Link } from "react-router-dom";
 import {
-  dispatchGetAllClientes,
-  fetchAllClientes,
-} from "../../../redux/actions/clientesAction";
+  dispatchGetAllCitas,
+  fetchAllCitas,
+} from "../../../redux/actions/citaAction";
 
 const initialState = {
   nombre: "",
-  nombreEmpresa: "",
-  correo: "",
+  fecha: "",
+  lugar: "",
   telefono: "",
   err: "",
   success: "",
 };
-const Cliente = () => {
+const Citas = () => {
   const token = useSelector((state) => state.token);
-  const clientes = useSelector((state) => state.clientes);
+  const citas = useSelector((state) => state.citas);
 
   const [data, setData] = useState(initialState);
-  const { nombre, nombreEmpresa, correo, telefono, err, success } = data;
+  const { nombre, fecha, lugar, telefono, err, success } = data;
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    fetchAllClientes(token).then((res) => {
-      dispatch(dispatchGetAllClientes(res));
+    fetchAllCitas(token).then((res) => {
+      dispatch(dispatchGetAllCitas(res));
     });
   }, [token, dispatch, callback]);
 
@@ -40,14 +40,14 @@ const Cliente = () => {
     setData({ ...data, [name]: value, err: "", success: "" });
   };
 
-  const createCliente = async () => {
+  const createCita = async () => {
     try {
       const res = await axios.post(
-        "/admin/clientes",
+        "/admin/citas",
         {
           nombre: nombre,
-          nombreEmpresa: nombreEmpresa,
-          correo: correo,
+          fecha: fecha,
+          lugar: lugar,
           telefono: telefono,
         },
         {
@@ -67,7 +67,7 @@ const Cliente = () => {
     try {
       if (window.confirm("Seguro que deseas borrar este cliente?")) {
         setLoading(true);
-        await axios.delete(`/admin/clientes/${id}`, {
+        await axios.delete(`/admin/citas/${id}`, {
           headers: { Authorization: token },
         });
         setLoading(false);
@@ -85,7 +85,7 @@ const Cliente = () => {
       {loading && <h3>Loading...</h3>}
       <div className="profile_page">
         <div className="col-left">
-          <h2>Crear Cliente</h2>
+          <h2>Crear Cita</h2>
           <div className="form-group">
             <label htmlFor="nombre">Nombre</label>
             <input
@@ -98,24 +98,24 @@ const Cliente = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="nombreEmpresa">Nombre de la Empresa</label>
+            <label htmlFor="nombreEmpresa">Fecha de la Cita</label>
             <input
               type="text"
-              name="nombreEmpresa"
-              id="nombreEmpresa"
-              value={nombreEmpresa}
-              placeholder="Nombre De la Empresa"
+              name="fecha"
+              id="fecha"
+              value={fecha}
+              placeholder="Fecha de la Cita"
               onChange={handleChange}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="correo">Correo Electronico</label>
+            <label htmlFor="correo">Lugar de la Cita</label>
             <input
               type="text"
-              name="correo"
-              id="correo"
-              value={correo}
-              placeholder="Correo Electronico"
+              name="lugar"
+              id="lugar"
+              value={lugar}
+              placeholder="Direccion"
               onChange={handleChange}
             />
           </div>
@@ -130,44 +130,38 @@ const Cliente = () => {
               onChange={handleChange}
             />
           </div>
-          <div>
-            <em style={{ color: "crimson" }}>
-              * If you update your password here you will not be able to login
-              quickly with Google or Facebook
-            </em>
-          </div>
-          <button disabled={loading} onClick={createCliente}>
-            Crear Cliente
+          <button disabled={loading} onClick={createCita}>
+            Crear Cita
           </button>
         </div>
 
         <div className="col-right">
-          <h2>Clientes Actuales</h2>
+          <h2>Citas Actuales</h2>
           <div style={{ overflowX: "auto" }}>
             <table className="customers">
               <thead>
                 <tr>
                   <th>Nombre</th>
-                  <th>Empresa</th>
-                  <th>Email</th>
+                  <th>Fecha</th>
+                  <th>Lugar</th>
                   <th>Telefono</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {clientes.map((cliente) => (
-                  <tr key={cliente._id}>
-                    <td>{cliente.nombre}</td>
-                    <td>{cliente.nombreEmpresa}</td>
-                    <td>{cliente.correo}</td>
-                    <td>{cliente.telefono}</td>
+                {citas.map((cita) => (
+                  <tr key={cita._id}>
+                    <td>{cita.nombre}</td>
+                    <td>{cita.fecha}</td>
+                    <td>{cita.lugar}</td>
+                    <td>{cita.telefono}</td>
                     <td>
-                      <Link to={`/cliente-update/${cliente._id}`}>
+                      <Link to={`/cita-update/${cita._id}`}>
                         <i className="fas fa-edit" title="Edit"></i>
                       </Link>
                       <i
                         className="fas fa-trash-alt"
-                        onClick={() => handleDelete(cliente._id)}
+                        onClick={() => handleDelete(cita._id)}
                         title="Remove"
                       ></i>
                     </td>
@@ -182,4 +176,4 @@ const Cliente = () => {
   );
 };
 
-export default Cliente;
+export default Citas;

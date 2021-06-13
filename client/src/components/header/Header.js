@@ -31,6 +31,9 @@ const Header = () => {
             <Link to="/adminClientes">Administrar Clientes</Link>
           </li>
           <li>
+            <Link to="/adminCitas">Administrar Citas</Link>
+          </li>
+          <li>
             <Link to="/" onClick={handleLogout}>
               Logout
             </Link>

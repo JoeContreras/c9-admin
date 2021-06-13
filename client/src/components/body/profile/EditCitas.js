@@ -9,60 +9,56 @@ import axios from "axios";
 
 const initialState = {
   nombre: "",
-  nombreEmpresa: "",
-  correo: "",
+  fecha: "",
+  lugar: "",
   telefono: "",
   err: "",
   success: "",
 };
-const EditCliente = () => {
+const EditCita = () => {
   const { id } = useParams();
   const history = useHistory();
 
-  const clientes = useSelector((state) => state.clientes);
+  const citas = useSelector((state) => state.citas);
   const token = useSelector((state) => state.token);
 
-  const [editCliente, setEditCliente] = useState([]);
-  const [newCliente, setNewCliente] = useState(initialState);
+  const [editCita, setEditCita] = useState([]);
+  const [newCita, setNewCita] = useState(initialState);
 
-  const { nombre, nombreEmpresa, correo, telefono, err, success } = newCliente;
+  const { nombre, fecha, lugar, telefono, err, success } = newCita;
 
   useEffect(() => {
-    if (clientes.length !== 0) {
-      clientes.forEach((cliente) => {
-        if (cliente._id === id) {
-          setEditCliente(cliente);
+    if (citas.length !== 0) {
+      citas.forEach((cita) => {
+        if (cita._id === id) {
+          setEditCita(cita);
         }
       });
     } else {
-      history.push("/adminClientes");
+      history.push("/adminCitas");
     }
-  }, [clientes, id, history]);
+  }, [citas, id, history]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewCliente({ ...newCliente, [name]: value, err: "", success: "" });
+    setNewCita({ ...newCita, [name]: value, err: "", success: "" });
   };
 
   const handleUpdate = async () => {
     try {
       const res = await axios.patch(
-        `/admin/clientes/${editCliente._id}`,
+        `/admin/citas/${editCita._id}`,
         {
-          nombre: nombre ? nombre : editCliente.nombre,
-          nombreEmpresa: nombreEmpresa
-            ? nombreEmpresa
-            : editCliente.nombreEmpresa,
-          correo: correo ? correo : editCliente.correo,
-          telefono: telefono ? telefono : editCliente.telefono,
+          nombre: nombre ? nombre : editCita.nombre,
+          fecha: fecha ? fecha : editCita.fecha,
+          lugar: lugar ? lugar : editCita.lugar,
+          telefono: telefono ? telefono : editCita.telefono,
         },
         { headers: { Authorization: token } }
       );
-      // setNewCliente({ ...newCliente, err: "", success: res.data.msg });
-      setNewCliente({ ...newCliente, err: "", success: "Cliente Actualizado" });
+      setNewCita({ ...newCita, err: "", success: "Cita Actualizada" });
     } catch (e) {
-      // setNewCliente({ ...newCliente, err: e.response.data.msg, success: "" });
-      setNewCliente({ ...newCliente, err: e.response.data.msg, success: "" });
+      setNewCita({ ...newCita, err: e.response.data.msg, success: "" });
     }
   };
 
@@ -82,27 +78,27 @@ const EditCliente = () => {
               type="text"
               name="nombre"
               id="nombre"
-              defaultValue={editCliente.nombre}
+              defaultValue={editCita.nombre}
               onChange={handleChange}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="nombreEmpresa">Nombre Empresa</label>
+            <label htmlFor="nombreEmpresa">Fecha de la cita</label>
             <input
               type="text"
-              name="nombreEmpresa"
-              id="nombreEmpresa"
-              defaultValue={editCliente.nombreEmpresa}
+              name="fecha"
+              id="fecha"
+              defaultValue={editCita.fecha}
               onChange={handleChange}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="correo">Email</label>
+            <label htmlFor="correo">Lugar de la cita</label>
             <input
               type="text"
-              name="correo"
-              id="correo"
-              defaultValue={editCliente.correo}
+              name="lugar"
+              id="lugar"
+              defaultValue={editCita.lugar}
               onChange={handleChange}
             />
           </div>
@@ -112,7 +108,7 @@ const EditCliente = () => {
               type="text"
               name="telefono"
               id="telefono"
-              defaultValue={editCliente.telefono}
+              defaultValue={editCita.telefono}
               onChange={handleChange}
             />
           </div>
@@ -126,4 +122,4 @@ const EditCliente = () => {
   );
 };
 
-export default EditCliente;
+export default EditCita;

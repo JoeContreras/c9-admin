@@ -34,5 +34,10 @@ userSchema.virtual("clientes", {
   localField: "_id",
   foreignField: "owner",
 });
+userSchema.virtual("citas", {
+  ref: "Cita",
+  localField: "_id",
+  foreignField: "owner",
+});
 
 module.exports = mongoose.model("User", userSchema);

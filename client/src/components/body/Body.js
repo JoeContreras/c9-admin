@@ -12,6 +12,8 @@ import EditUser from "./profile/EditUser";
 import Home from "./home/Home";
 import Clientes from "./profile/Clientes";
 import EditCliente from "./profile/EditCliente";
+import Citas from "./profile/Citas";
+import EditCita from "./profile/EditCitas";
 
 const Body = () => {
   const auth = useSelector((state) => state.auth);
@@ -52,10 +54,16 @@ const Body = () => {
           exact
         />
         <Route
+          path="/cita-update/:id"
+          component={isLogged ? EditCita : Login}
+          exact
+        />
+        <Route
           path="/adminClientes"
           component={isLogged ? Clientes : Login}
           exact
         />
+        <Route path="/adminCitas" component={isLogged ? Citas : Login} exact />
         <Route
           path="/user/activate/:activation_token"
           component={ActivationEmail}
