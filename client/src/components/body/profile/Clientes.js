@@ -10,6 +10,7 @@ import {
   dispatchGetAllClientes,
   fetchAllClientes,
 } from "../../../redux/actions/clientesAction";
+import { isEmail, isPhone } from "../../utils/validation/Validation";
 
 const initialState = {
   nombre: "",
@@ -41,6 +42,22 @@ const Cliente = () => {
   };
 
   const createCliente = async () => {
+    if (!isEmail(correo)) {
+      return setData({
+        ...data,
+        err: "Please enter a valid email address",
+        success: "",
+      });
+    }
+
+    if (!isPhone(telefono)) {
+      return setData({
+        ...data,
+        err: "Please enter a valid phone number",
+        success: "",
+      });
+    }
+
     try {
       const res = await axios.post(
         "/admin/clientes",

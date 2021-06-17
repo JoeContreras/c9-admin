@@ -10,6 +10,7 @@ import {
   dispatchGetAllCitas,
   fetchAllCitas,
 } from "../../../redux/actions/citaAction";
+import { isPhone } from "../../utils/validation/Validation";
 
 const initialState = {
   nombre: "",
@@ -41,6 +42,13 @@ const Citas = () => {
   };
 
   const createCita = async () => {
+    if (!isPhone(telefono)) {
+      return setData({
+        ...data,
+        err: "Please enter a valid phone number",
+        success: "",
+      });
+    }
     try {
       const res = await axios.post(
         "/admin/citas",
