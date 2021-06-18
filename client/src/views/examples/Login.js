@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // reactstrap components
 import {
@@ -32,10 +32,15 @@ import {
   Row,
   Col,
 } from "reactstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { dispatchLogin } from "../../redux/actions/authAction";
+import {
+  dispatchGetUser,
+  dispatchLogin,
+  fetchUser,
+} from "../../redux/actions/authAction";
 import { useHistory } from "react-router-dom";
+import GoogleLogin from "react-google-login";
 
 const initialState = {
   email: "",
@@ -49,6 +54,31 @@ const Login = () => {
   const { email, password, err, success } = user;
   const dispatch = useDispatch();
   const history = useHistory();
+  const token = useSelector((state) => state.token);
+  const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const firstLogin = localStorage.getItem("firstLogin");
+    if (firstLogin) {
+      const getToken = async () => {
+        const res = await axios.post("user/refresh_token", null);
+        dispatch({ type: "GET_TOKEN", payload: res.data.access_token });
+      };
+      getToken();
+    }
+  }, [auth.isLogged, dispatch]);
+
+  useEffect(() => {
+    if (token) {
+      const getUser = () => {
+        dispatch(dispatchLogin());
+        return fetchUser(token).then((res) => {
+          dispatch(dispatchGetUser(res));
+        });
+      };
+      getUser();
+    }
+  }, [token, dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,7 +87,7 @@ const Login = () => {
       setUser({ ...user, err: "", success: res.data.msg });
       localStorage.setItem("firstLogin", true);
       dispatch(dispatchLogin());
-      history.push("/admin/user-profile");
+      history.push("/");
     } catch (e) {
       e.response.data.msg &&
         setUser({
@@ -137,23 +167,31 @@ const Login = () => {
                 </span>
                 <span className="btn-inner--text">Github</span>
               </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/google.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Google</span>
-              </Button>
+              <GoogleLogin
+                clientId="474523247593-jkgm5peikns2cs0hiuegv7nrafie0itk.apps.googleusercontent.com"
+                render={(renderProps) => (
+                  <Button
+                    className="btn-neutral btn-icon"
+                    color="default"
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                  >
+                    <span className="btn-inner--icon">
+                      <img
+                        alt="..."
+                        src={
+                          require("../../assets/img/icons/common/google.svg")
+                            .default
+                        }
+                      />
+                    </span>
+                    <span className="btn-inner--text">Google</span>
+                  </Button>
+                )}
+                buttonText="Login with Google"
+                onSuccess={responseGoogle}
+                cookiePolicy={"single_host_origin"}
+              />
             </div>
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
