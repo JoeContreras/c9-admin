@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState } from "react";
 
 // reactstrap components
 import {
@@ -32,8 +32,85 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { dispatchLogin } from "../../redux/actions/authAction";
+import { useHistory } from "react-router-dom";
+
+const initialState = {
+  email: "",
+  password: "",
+  err: "",
+  success: "",
+};
 
 const Login = () => {
+  const [user, setUser] = useState(initialState);
+  const { email, password, err, success } = user;
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/user/login", { email, password });
+      setUser({ ...user, err: "", success: res.data.msg });
+      localStorage.setItem("firstLogin", true);
+      dispatch(dispatchLogin());
+      history.push("/admin/user-profile");
+    } catch (e) {
+      e.response.data.msg &&
+        setUser({
+          ...user,
+          err: e.response.data.msg,
+          success: "",
+        });
+    }
+  };
+  const handleChangeInput = (e) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value, err: "", success: "" });
+  };
+
+  const responseGoogle = async (response) => {
+    try {
+      const res = await axios.post("/user/google_login", {
+        tokenId: response.tokenId,
+      });
+      setUser({ ...user, err: "", success: res.data.msg });
+      localStorage.setItem("firstLogin", true);
+      dispatch(dispatchLogin());
+      history.push("/");
+    } catch (e) {
+      e.response.data.msg &&
+        setUser({
+          ...user,
+          err: e.response.data.msg,
+          success: "",
+        });
+    }
+  };
+
+  const responseFacebook = async (response) => {
+    try {
+      const { accessToken, userID } = response;
+      const res = await axios.post("/user/facebook_login", {
+        accessToken,
+        userID,
+      });
+      setUser({ ...user, err: "", success: res.data.msg });
+      localStorage.setItem("firstLogin", true);
+      dispatch(dispatchLogin());
+      history.push("/");
+    } catch (e) {
+      e.response.data.msg &&
+        setUser({
+          ...user,
+          err: e.response.data.msg,
+          success: "",
+        });
+    }
+  };
   return (
     <>
       <Col lg="5" md="7">
@@ -83,7 +160,7 @@ const Login = () => {
             <div className="text-center text-muted mb-4">
               <small>Or sign in with credentials</small>
             </div>
-            <Form role="form">
+            <Form onSubmit={handleSubmit} role="form">
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -95,6 +172,9 @@ const Login = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    name="email"
+                    value={email}
+                    onChange={handleChangeInput}
                   />
                 </InputGroup>
               </FormGroup>
@@ -109,24 +189,14 @@ const Login = () => {
                     placeholder="Password"
                     type="password"
                     autoComplete="new-password"
+                    name="password"
+                    value={password}
+                    onChange={handleChangeInput}
                   />
                 </InputGroup>
               </FormGroup>
-              <div className="custom-control custom-control-alternative custom-checkbox">
-                <input
-                  className="custom-control-input"
-                  id=" customCheckLogin"
-                  type="checkbox"
-                />
-                <label
-                  className="custom-control-label"
-                  htmlFor=" customCheckLogin"
-                >
-                  <span className="text-muted">Remember me</span>
-                </label>
-              </div>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="submit">
                   Sign in
                 </Button>
               </div>

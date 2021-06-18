@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect } from "react";
 
 // reactstrap components
 import {
@@ -32,6 +32,13 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import {
+  dispatchGetUser,
+  dispatchLogin,
+  fetchUser,
+} from "../../redux/actions/authAction";
 
 const Profile = () => {
   return (
