@@ -32,6 +32,7 @@ import {
   dispatchLogin,
   fetchUser,
 } from "../redux/actions/authAction";
+import axios from "axios";
 
 const Auth = (props) => {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const Auth = (props) => {
     const firstLogin = localStorage.getItem("firstLogin");
     if (firstLogin) {
       const getToken = async () => {
-        const res = await API.post("/user/refresh_token", null);
+        const res = await axios.post("/user/refresh_token", null);
         dispatch({ type: "GET_TOKEN", payload: res.data.access_token });
         console.log(res);
       };
