@@ -34,8 +34,18 @@ import {
   Container,
   Media,
 } from "reactstrap";
+import axios from "axios";
 
 const AdminNavbar = (props) => {
+  const handleLogout = async () => {
+    try {
+      await axios.get("/user/logout");
+      localStorage.removeItem("firstLogin");
+      window.location.href = "/";
+    } catch (e) {
+      window.location.href = "/";
+    }
+  };
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -99,7 +109,7 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem onClick={handleLogout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>

@@ -41,6 +41,9 @@ import {
 } from "../../redux/actions/authAction";
 import { useHistory } from "react-router-dom";
 import GoogleLogin from "react-google-login";
+// import FacebookLogin from "react-facebook-login";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import axios from "axios";
 
 const initialState = {
   email: "",
@@ -58,11 +61,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/user/login", { email, password });
+      const res = await axios.post("/user/login", { email, password });
       setUser({ ...user, err: "", success: res.data.msg });
       localStorage.setItem("firstLogin", true);
       dispatch(dispatchLogin());
-      history.push("/");
+      history.push("/admin/user-profile");
     } catch (e) {
       e.response.data.msg &&
         setUser({
@@ -79,13 +82,13 @@ const Login = () => {
 
   const responseGoogle = async (response) => {
     try {
-      const res = await API.post("/user/google_login", {
+      const res = await axios.post("/user/google_login", {
         tokenId: response.tokenId,
       });
       setUser({ ...user, err: "", success: res.data.msg });
       localStorage.setItem("firstLogin", true);
       dispatch(dispatchLogin());
-      history.push("/");
+      history.push("/admin/user-profile");
     } catch (e) {
       e.response.data.msg &&
         setUser({
@@ -99,14 +102,14 @@ const Login = () => {
   const responseFacebook = async (response) => {
     try {
       const { accessToken, userID } = response;
-      const res = await API.post("/user/facebook_login", {
+      const res = await axios.post("/user/facebook_login", {
         accessToken,
         userID,
       });
       setUser({ ...user, err: "", success: res.data.msg });
       localStorage.setItem("firstLogin", true);
       dispatch(dispatchLogin());
-      history.push("/");
+      history.push("/admin/user-profile");
     } catch (e) {
       e.response.data.msg &&
         setUser({
@@ -125,23 +128,30 @@ const Login = () => {
               <small>Sign in with</small>
             </div>
             <div className="btn-wrapper text-center">
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/github.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
+              <FacebookLogin
+                appId="937021713532051"
+                autoLoad={false}
+                fields="name,email,picture"
+                callback={responseFacebook}
+                render={(renderProps) => (
+                  <Button
+                    className="btn-neutral btn-icon"
+                    color="default"
+                    onClick={renderProps.onClick}
+                  >
+                    <span className="btn-inner--icon">
+                      <img
+                        alt="..."
+                        src={
+                          require("../../assets/img/Facebook_icon_2013.svg.png")
+                            .default
+                        }
+                      />
+                    </span>
+                    <span className="btn-inner--text">Facebook</span>
+                  </Button>
+                )}
+              />
               <GoogleLogin
                 clientId="474523247593-jkgm5peikns2cs0hiuegv7nrafie0itk.apps.googleusercontent.com"
                 render={(renderProps) => (
