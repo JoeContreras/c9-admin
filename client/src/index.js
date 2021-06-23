@@ -26,7 +26,6 @@ import "assets/scss/argon-dashboard-react.scss";
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 import DataProvider from "./redux/dataProvider";
-import { useSelector } from "react-redux";
 
 ReactDOM.render(
   <DataProvider>

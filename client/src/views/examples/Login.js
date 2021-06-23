@@ -33,7 +33,7 @@ import {
   Col,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import API from "../../apis/base";
 import {
   dispatchGetUser,
   dispatchLogin,
@@ -54,36 +54,11 @@ const Login = () => {
   const { email, password, err, success } = user;
   const dispatch = useDispatch();
   const history = useHistory();
-  const token = useSelector((state) => state.token);
-  const auth = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    const firstLogin = localStorage.getItem("firstLogin");
-    if (firstLogin) {
-      const getToken = async () => {
-        const res = await axios.post("user/refresh_token", null);
-        dispatch({ type: "GET_TOKEN", payload: res.data.access_token });
-      };
-      getToken();
-    }
-  }, [auth.isLogged, dispatch]);
-
-  useEffect(() => {
-    if (token) {
-      const getUser = () => {
-        dispatch(dispatchLogin());
-        return fetchUser(token).then((res) => {
-          dispatch(dispatchGetUser(res));
-        });
-      };
-      getUser();
-    }
-  }, [token, dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/user/login", { email, password });
+      const res = await API.post("/user/login", { email, password });
       setUser({ ...user, err: "", success: res.data.msg });
       localStorage.setItem("firstLogin", true);
       dispatch(dispatchLogin());
@@ -104,7 +79,7 @@ const Login = () => {
 
   const responseGoogle = async (response) => {
     try {
-      const res = await axios.post("/user/google_login", {
+      const res = await API.post("/user/google_login", {
         tokenId: response.tokenId,
       });
       setUser({ ...user, err: "", success: res.data.msg });
@@ -124,7 +99,7 @@ const Login = () => {
   const responseFacebook = async (response) => {
     try {
       const { accessToken, userID } = response;
-      const res = await axios.post("/user/facebook_login", {
+      const res = await API.post("/user/facebook_login", {
         accessToken,
         userID,
       });
