@@ -31,6 +31,7 @@ import {
   InputGroup,
   Row,
   Col,
+  UncontrolledAlert,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -122,6 +123,20 @@ const Login = () => {
   return (
     <>
       <Col lg="5" md="7">
+        {success && (
+          <UncontrolledAlert className="alert-default" fade={false}>
+            <span className="alert-inner--text">
+              <strong>Success!</strong> {success}
+            </span>
+          </UncontrolledAlert>
+        )}
+        {err && (
+          <UncontrolledAlert color="danger" fade={false}>
+            <span className="alert-inner--text">
+              <strong>Error!</strong> {err}
+            </span>
+          </UncontrolledAlert>
+        )}
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent pb-5">
             <div className="text-muted text-center mt-2 mb-3">
@@ -228,13 +243,9 @@ const Login = () => {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
+            <Link className="text-light" to="/auth/forgot_password">
               <small>Forgot password?</small>
-            </a>
+            </Link>
           </Col>
           <Col className="text-right" xs="6">
             <Link className="text-light" to="/auth/register">

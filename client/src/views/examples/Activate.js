@@ -36,12 +36,7 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import GoogleLogin from "react-google-login";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
-const initialState = {
-  exampleModal: false,
-};
 const ActivationEmail = () => {
   const { activation_token } = useParams();
   const [err, setErr] = useState("");

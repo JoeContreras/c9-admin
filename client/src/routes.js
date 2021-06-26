@@ -23,6 +23,8 @@ import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import Activate from "./views/examples/Activate";
+import ForgotPassword from "./views/examples/ForgotPassword";
+import ResetPassword from "./views/examples/ResetPassword";
 
 var routes = [
   {
@@ -37,6 +39,20 @@ var routes = [
     name: "ActivationEmail",
     icon: "ni ni-tv-2 text-primary",
     component: Activate,
+    layout: "/auth",
+  },
+  {
+    path: "/forgot_password",
+    name: "ForgotPassword",
+    icon: "ni ni-tv-2 text-primary",
+    component: ForgotPassword,
+    layout: "/auth",
+  },
+  {
+    path: "/reset/:token",
+    name: "ForgotPassword",
+    icon: "ni ni-tv-2 text-primary",
+    component: ResetPassword,
     layout: "/auth",
   },
   {

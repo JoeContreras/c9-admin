@@ -31,7 +31,6 @@ import {
   InputGroup,
   Row,
   Col,
-  Alert,
   UncontrolledAlert,
 } from "reactstrap";
 import {
@@ -294,6 +293,7 @@ const Register = () => {
                   />
                 </InputGroup>
               </FormGroup>
+
               <Row className="my-4">
                 <Col xs="12">
                   <div className="custom-control custom-control-alternative custom-checkbox">
