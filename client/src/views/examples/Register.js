@@ -31,6 +31,8 @@ import {
   InputGroup,
   Row,
   Col,
+  Alert,
+  UncontrolledAlert,
 } from "reactstrap";
 import {
   isEmail,
@@ -152,6 +154,20 @@ const Register = () => {
   return (
     <>
       <Col lg="6" md="8">
+        {success && (
+          <UncontrolledAlert className="alert-default" fade={false}>
+            <span className="alert-inner--text">
+              <strong>Success!</strong> {success}
+            </span>
+          </UncontrolledAlert>
+        )}
+        {err && (
+          <UncontrolledAlert color="danger" fade={false}>
+            <span className="alert-inner--text">
+              <strong>Error!</strong> {err}
+            </span>
+          </UncontrolledAlert>
+        )}
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent pb-5">
             <div className="text-muted text-center mt-2 mb-4">
