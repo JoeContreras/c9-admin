@@ -33,7 +33,6 @@ import {
   Col,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import API from "../../apis/base";
 import {
   dispatchGetUser,
   dispatchLogin,
@@ -43,6 +42,7 @@ import { useHistory } from "react-router-dom";
 import GoogleLogin from "react-google-login";
 // import FacebookLogin from "react-facebook-login";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const initialState = {
@@ -237,13 +237,9 @@ const Login = () => {
             </a>
           </Col>
           <Col className="text-right" xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
+            <Link className="text-light" to="/auth/register">
               <small>Create new account</small>
-            </a>
+            </Link>
           </Col>
         </Row>
       </Col>
