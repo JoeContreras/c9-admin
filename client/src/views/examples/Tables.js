@@ -944,6 +944,7 @@ const Tables = () => {
             </Card>
           </div>
         </Row>
+
         {/* Dark table */}
         <Row className="mt-5">
           <div className="col">
