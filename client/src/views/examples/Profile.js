@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { useEffect, useState } from "react";
 
 // reactstrap components
@@ -56,7 +39,7 @@ import {
   isLength,
   isMatch,
 } from "../../components/utils/validation/Validation";
-import { showSuccessMsg } from "../../components/utils/notification/Notification";
+import DeleteModal from "../Modals/DeleteModal";
 
 const initialState = {
   name: "",
@@ -75,6 +58,8 @@ const Profile = () => {
   const [avatar, setAvatar] = useState(false);
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
+  const [modalState, setModalState] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -84,6 +69,22 @@ const Profile = () => {
       });
     }
   }, [token, isAdmin, dispatch, callback]);
+
+  const toggleModal = () => {
+    setModalState(!modalState);
+  };
+  const renderModal = (id) => {
+    return (
+      <DeleteModal
+        modalState={modalState}
+        toggleModal={toggleModal}
+        id={userId}
+        title="Borrar usuario"
+        content="Estas seguro que quieres Borrar este Usuario?"
+        handleClick={handleDelete}
+      />
+    );
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -192,14 +193,12 @@ const Profile = () => {
 
   const handleDelete = async (id) => {
     try {
-      if (window.confirm("Are you sure you want to delete this account?")) {
-        setLoading(true);
-        await axios.delete(`/user/delete/${id}`, {
-          headers: { Authorization: token },
-        });
-        setLoading(false);
-        setCallback(!callback);
-      }
+      setLoading(true);
+      await axios.delete(`/user/delete/${id}`, {
+        headers: { Authorization: token },
+      });
+      setLoading(false);
+      setCallback(!callback);
     } catch (e) {
       setData({ ...data, err: e.response.data.msg, success: "" });
     }
@@ -210,6 +209,7 @@ const Profile = () => {
       <UserHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
+        {renderModal(1)}
         <Row>
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
             <Card className="card-profile shadow">
@@ -515,10 +515,10 @@ const Profile = () => {
                                 {user.role === 1 ? <p>Admin</p> : <p>User</p>}
                               </td>
                               <td className="text-right">
+                                {/*
                                 <UncontrolledDropdown>
                                   <DropdownToggle
                                     className="btn-icon-only text-light"
-                                    href="#pablo"
                                     role="button"
                                     size="sm"
                                     color=""
@@ -531,25 +531,41 @@ const Profile = () => {
                                     right
                                   >
                                     <DropdownItem
-                                      href="#pablo"
                                       onClick={(e) => e.preventDefault()}
                                     >
-                                      Action
+                                      Editar Usuario
                                     </DropdownItem>
                                     <DropdownItem
-                                      href="#pablo"
-                                      onClick={(e) => e.preventDefault()}
+                                      onClick={() => renderModal(user._id)}
                                     >
-                                      Another action
-                                    </DropdownItem>
-                                    <DropdownItem
-                                      href="#pablo"
-                                      onClick={(e) => e.preventDefault()}
-                                    >
-                                      Something else here
+                                      Borrar Usuario
                                     </DropdownItem>
                                   </DropdownMenu>
                                 </UncontrolledDropdown>
+
+*/}
+
+                                <Button
+                                  onClick={() => {
+                                    console.log(typeof user._id);
+                                  }}
+                                  color="primary"
+                                  type="button"
+                                  size="sm"
+                                >
+                                  Editar
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    setUserId(user._id);
+                                    setModalState(!modalState);
+                                  }}
+                                  color="danger"
+                                  type="button"
+                                  size="sm"
+                                >
+                                  Borrar
+                                </Button>
                               </td>
                             </tr>
                           ))}
