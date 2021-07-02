@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // reactstrap components
-import { Alert, Button, Modal } from "reactstrap";
+import { Button, Modal } from "reactstrap";
 
 const DeleteModal = (props) => {
   return (

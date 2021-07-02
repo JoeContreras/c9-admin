@@ -26,7 +26,6 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
 import { useDispatch, useSelector } from "react-redux";
-import API from "../apis/base";
 import {
   dispatchGetUser,
   dispatchLogin,
@@ -38,6 +37,13 @@ const Admin = (props) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const auth = useSelector((state) => state.auth);
+
+  const newRoutes = [...routes];
+  const removeValFromIndex = [1, 2, 3];
+
+  for (let i = removeValFromIndex.length - 1; i >= 0; i--)
+    newRoutes.splice(removeValFromIndex[i], 1);
+  // const newRoutes = Array.from(routes);
 
   useEffect(() => {
     const firstLogin = localStorage.getItem("firstLogin");
@@ -87,12 +93,13 @@ const Admin = (props) => {
   };
 
   const getBrandText = (path) => {
-    for (let i = 0; i < routes.length; i++) {
+    for (let i = 0; i < newRoutes.length; i++) {
       if (
-        props.location.pathname.indexOf(routes[i].layout + routes[i].path) !==
-        -1
+        props.location.pathname.indexOf(
+          newRoutes[i].layout + newRoutes[i].path
+        ) !== -1
       ) {
-        return routes[i].name;
+        return newRoutes[i].name;
       }
     }
     return "Brand";
@@ -102,7 +109,7 @@ const Admin = (props) => {
     <>
       <Sidebar
         {...props}
-        routes={routes}
+        routes={newRoutes}
         logo={{
           innerLink: "/admin/index",
           imgSrc: require("../assets/img/brand/argon-react.png").default,
@@ -113,9 +120,10 @@ const Admin = (props) => {
         <AdminNavbar
           {...props}
           brandText={getBrandText(props.location.pathname)}
+          refreshCondition={mainContent}
         />
         <Switch>
-          {getRoutes(routes)}
+          {getRoutes(newRoutes)}
           <Redirect from="*" to="/admin/index" />
         </Switch>
         <Container fluid>

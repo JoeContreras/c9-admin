@@ -40,6 +40,8 @@ import {
   isMatch,
 } from "../../components/utils/validation/Validation";
 import DeleteModal from "../Modals/DeleteModal";
+import EditModal from "../Modals/EditModal";
+import { dispatchGetUser, fetchUser } from "../../redux/actions/authAction";
 
 const initialState = {
   name: "",
@@ -54,15 +56,19 @@ const Profile = () => {
   const users = useSelector((state) => state.users);
   const { user, isAdmin } = auth;
   const [data, setData] = useState(initialState);
-  const { name, email, password, cf_password, err, success } = data;
+  const { name, password, cf_password, err, success } = data;
   const [avatar, setAvatar] = useState(false);
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
   const [modalState, setModalState] = useState(false);
+  const [editModalState, setEditModalState] = useState(false);
   const [userId, setUserId] = useState("");
 
   const dispatch = useDispatch();
   useEffect(() => {
+    fetchUser(token).then((res) => {
+      dispatch(dispatchGetUser(res));
+    });
     if (isAdmin) {
       fetchAllUsers(token).then((res) => {
         dispatch(dispatchGetAllUsers(res));
@@ -70,14 +76,29 @@ const Profile = () => {
     }
   }, [token, isAdmin, dispatch, callback]);
 
-  const toggleModal = () => {
+  const toggleEditModal = () => {
+    setEditModalState(!editModalState);
+  };
+  const renderEditModal = (id) => {
+    return (
+      <EditModal
+        modalState={editModalState}
+        toggleModal={toggleEditModal}
+        id={userId}
+        setCall={setCallback}
+        call={callback}
+      />
+    );
+  };
+
+  const toggleDeleteModal = () => {
     setModalState(!modalState);
   };
   const renderModal = (id) => {
     return (
       <DeleteModal
         modalState={modalState}
-        toggleModal={toggleModal}
+        toggleModal={toggleDeleteModal}
         id={userId}
         title="Borrar usuario"
         content="Estas seguro que quieres Borrar este Usuario?"
@@ -125,6 +146,7 @@ const Profile = () => {
       });
       setLoading(false);
       setAvatar(res.data.url);
+      setCallback(!callback);
       // setData({ ...data, err: "", success: "Avatar updated" });
     } catch (e) {
       setData({ ...data, err: e.response.data.msg, success: "" });
@@ -182,7 +204,7 @@ const Profile = () => {
   };
 
   const handleUpdate = () => {
-    if (user || avatar) {
+    if (name || avatar) {
       updateInfo();
     }
     if (password) {
@@ -210,6 +232,7 @@ const Profile = () => {
       {/* Page content */}
       <Container className="mt--7" fluid>
         {renderModal(1)}
+        {renderEditModal(1)}
         <Row>
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
             <Card className="card-profile shadow">
@@ -259,6 +282,7 @@ const Profile = () => {
                     Connect
                   </Button>
 */}
+                  {/*
                   <Button
                     className="float-right"
                     color="default"
@@ -268,6 +292,7 @@ const Profile = () => {
                   >
                     Actualizar Imagen
                   </Button>
+*/}
                 </div>
               </CardHeader>
               <CardBody className="pt-0 pt-md-4">
@@ -291,7 +316,7 @@ const Profile = () => {
                 </Row>
                 <div className="text-center">
                   <h3>
-                    Jessica Jones
+                    {user.name}
                     <span className="font-weight-light">, 27</span>
                   </h3>
                   <div className="h5 font-weight-300">
@@ -357,7 +382,7 @@ const Profile = () => {
                           id="input-username"
                           placeholder="Nombre"
                           type="text"
-                          nam="name"
+                          name="name"
                           defaultValue={user.name}
                           onChange={handleChange}
                         />
@@ -419,6 +444,28 @@ const Profile = () => {
                           onChange={handleChange}
                         />
                       </FormGroup>
+                      <div className="input-group mb-3">
+                        {/*
+                        <div className="input-group-prepend">
+                          <span className="input-group-text">Upload</span>
+                        </div>
+*/}
+                        <div className="custom-file">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            id="inputGroupFile01"
+                            name="file"
+                            onChange={updateAvatar}
+                          />
+                          <label
+                            className="custom-file-label"
+                            htmlFor="inputGroupFile01"
+                          >
+                            Nuevo Avatar
+                          </label>
+                        </div>
+                      </div>
                       <div className="text-right">
                         <Button
                           disabled={loading}
@@ -426,7 +473,7 @@ const Profile = () => {
                           color="primary"
                           type="submit"
                         >
-                          Sign in
+                          Actualizar
                         </Button>
                       </div>
                     </Col>
@@ -547,7 +594,8 @@ const Profile = () => {
 
                                 <Button
                                   onClick={() => {
-                                    console.log(typeof user._id);
+                                    setUserId(user._id);
+                                    setEditModalState(!editModalState);
                                   }}
                                   color="primary"
                                   type="button"

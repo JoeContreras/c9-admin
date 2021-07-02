@@ -45,7 +45,6 @@ const Auth = (props) => {
       const getToken = async () => {
         const res = await axios.post("/user/refresh_token", null);
         dispatch({ type: "GET_TOKEN", payload: res.data.access_token });
-        console.log(res);
       };
       getToken();
     }

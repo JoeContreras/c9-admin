@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
@@ -35,13 +35,30 @@ import {
   Media,
 } from "reactstrap";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { dispatchGetUser, fetchUser } from "../../redux/actions/authAction";
 
 const AdminNavbar = (props) => {
+  const auth = useSelector((state) => state.auth);
+  const token = useSelector((state) => state.token);
+  const users = useSelector((state) => state.users);
+  const { user, isAdmin } = auth;
+  const [userAvatar, setUserAvatar] = useState("");
+  const dispatch = useDispatch();
+  const { refreshCondition } = props;
+
+  useEffect(() => {
+    /*
+    fetchUser(token).then((res) => {
+      dispatch(dispatchGetUser(res));
+    });
+*/
+    setUserAvatar(user.avatar);
+  }, [user, users]);
   const handleLogout = async () => {
     try {
       await axios.get("/user/logout");
       localStorage.removeItem("firstLogin");
-      window.location.href = "/";
     } catch (e) {
       window.location.href = "/";
     }
@@ -73,17 +90,11 @@ const AdminNavbar = (props) => {
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
                   <span className="avatar avatar-sm rounded-circle">
-                    <img
-                      alt="..."
-                      src={
-                        require("../../assets/img/theme/team-4-800x800.jpg")
-                          .default
-                      }
-                    />
+                    <img alt="..." src={userAvatar} />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      {user.name}
                     </span>
                   </Media>
                 </Media>
