@@ -5,7 +5,12 @@ import {
   fetchAllCitas,
 } from "../../redux/actions/citaAction";
 import { isPhone } from "../../components/utils/validation/Validation";
+import ReactDatetime from "react-datetime";
+import moment from "moment";
 import {
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
   Button,
   Card,
   CardHeader,
@@ -36,7 +41,7 @@ import EditModal from "../Modals/Citas/EditModal";
 
 const initialState = {
   nombre: "",
-  fecha: "",
+  fecha: new Date(),
   lugar: "",
   telefono: "",
   err: "",
@@ -44,6 +49,7 @@ const initialState = {
 };
 const Citas = () => {
   const token = useSelector((state) => state.token);
+  const clientes = useSelector((state) => state.clientes);
   const citas = useSelector((state) => state.citas);
   const auth = useSelector((state) => state.auth);
 
@@ -68,6 +74,10 @@ const Citas = () => {
     setData({ ...data, [name]: value, err: "", success: "" });
   };
 
+  const handleDate = (date) => {
+    // this.setState({date})
+    setData({ ...data, fecha: date });
+  };
   const createCita = async () => {
     if (!isPhone(telefono)) {
       return setData({
@@ -81,8 +91,8 @@ const Citas = () => {
         "/admin/citas",
         {
           nombre: nombre,
-          fecha: fecha,
           lugar: lugar,
+          fecha: fecha,
           telefono: telefono,
         },
         {
@@ -172,12 +182,12 @@ const Citas = () => {
                         <span className="description">Friends</span>
                       </div>
                       <div>
-                        <span className="heading">10</span>
-                        <span className="description">Photos</span>
+                        <span className="heading">{citas.length}</span>
+                        <span className="description">Citas</span>
                       </div>
                       <div>
-                        <span className="heading">89</span>
-                        <span className="description">Comments</span>
+                        <span className="heading">{clientes.length}</span>
+                        <span className="description">Clientes</span>
                       </div>
                     </div>
                   </div>
@@ -219,7 +229,7 @@ const Citas = () => {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">My account</h3>
+                    <h3 className="mb-0">Crear nueva Cita</h3>
                   </Col>
                   <Col className="text-right" xs="4">
                     <Button
@@ -255,10 +265,12 @@ const Citas = () => {
                           value={nombre}
                           placeholder="Nombre Completo"
                           onChange={handleChange}
+                          autoComplete="off"
                         />
                       </FormGroup>
                     </Col>
                     <Col lg="6">
+                      {/*
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -275,6 +287,32 @@ const Citas = () => {
                           placeholder="Fecha de la Cita"
                           onChange={handleChange}
                         />
+                      </FormGroup>
+
+*/}
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-username"
+                        >
+                          Fecha de la Cita
+                        </label>
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-calendar-grid-58" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <ReactDatetime
+                            initialValue={fecha}
+                            onChange={handleDate}
+                            inputProps={{
+                              placeholder: "Fecha de Cita",
+                              autoComplete: "off",
+                            }}
+                            timeFormat={true}
+                          />
+                        </InputGroup>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -361,7 +399,7 @@ const Citas = () => {
             <div className="col">
               <Card className="bg-default shadow">
                 <CardHeader className="bg-transparent border-0">
-                  <h3 className="text-white mb-0">Card tables</h3>
+                  <h3 className="text-white mb-0">Citas</h3>
                 </CardHeader>
                 <Table
                   className="align-items-center table-dark table-flush"
@@ -392,7 +430,11 @@ const Citas = () => {
                         <td>
                           <Media className="align-items-center">
                             <Media>
-                              <span className="mb-0 text-sm">{cita.fecha}</span>
+                              <span className="mb-0 text-sm">
+                                {moment(cita.fecha).format(
+                                  "MMMM Do YYYY, h:mm:ss a"
+                                )}
+                              </span>
                             </Media>
                           </Media>
                         </td>
