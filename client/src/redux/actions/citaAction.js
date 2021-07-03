@@ -2,7 +2,7 @@ import ACTIONS from "./index";
 import axios from "axios";
 
 export const fetchAllCitas = async (token) => {
-  const res = await axios.get("admin/citas", {
+  const res = await axios.get("/admin/citas", {
     headers: { Authorization: token },
   });
   return res;

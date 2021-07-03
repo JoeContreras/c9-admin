@@ -35,30 +35,23 @@ import {
   Media,
 } from "reactstrap";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { dispatchGetUser, fetchUser } from "../../redux/actions/authAction";
 
 const AdminNavbar = (props) => {
   const auth = useSelector((state) => state.auth);
-  const token = useSelector((state) => state.token);
-  const users = useSelector((state) => state.users);
-  const { user, isAdmin } = auth;
+  const { user } = auth;
   const [userAvatar, setUserAvatar] = useState("");
-  const dispatch = useDispatch();
-  const { refreshCondition } = props;
 
   useEffect(() => {
-    /*
-    fetchUser(token).then((res) => {
-      dispatch(dispatchGetUser(res));
-    });
-*/
     setUserAvatar(user.avatar);
-  }, [user, users]);
+  }, [user]);
+
   const handleLogout = async () => {
     try {
       await axios.get("/user/logout");
       localStorage.removeItem("firstLogin");
+      window.location.href = "/";
     } catch (e) {
       window.location.href = "/";
     }

@@ -27,6 +27,7 @@ import {
   UncontrolledTooltip,
   UncontrolledAlert,
 } from "reactstrap";
+
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,6 +55,8 @@ const Profile = () => {
   const auth = useSelector((state) => state.auth);
   const token = useSelector((state) => state.token);
   const users = useSelector((state) => state.users);
+  const clientes = useSelector((state) => state.clientes);
+  const citas = useSelector((state) => state.citas);
   const { user, isAdmin } = auth;
   const [data, setData] = useState(initialState);
   const { name, password, cf_password, err, success } = data;
@@ -228,7 +231,7 @@ const Profile = () => {
 
   return (
     <>
-      <UserHeader />
+      <UserHeader personName={user.name} />
       {/* Page content */}
       <Container className="mt--7" fluid>
         {renderModal(1)}
@@ -300,16 +303,16 @@ const Profile = () => {
                   <div className="col">
                     <div className="card-profile-stats d-flex justify-content-center mt-md-5">
                       <div>
-                        <span className="heading">22</span>
-                        <span className="description">Friends</span>
+                        <span className="heading">{users.length}</span>
+                        <span className="description">Usuarios</span>
                       </div>
                       <div>
-                        <span className="heading">10</span>
-                        <span className="description">Photos</span>
+                        <span className="heading">{citas.length}</span>
+                        <span className="description">Citas</span>
                       </div>
                       <div>
-                        <span className="heading">89</span>
-                        <span className="description">Comments</span>
+                        <span className="heading">{clientes.length}</span>
+                        <span className="description">Clientes</span>
                       </div>
                     </div>
                   </div>
@@ -331,15 +334,11 @@ const Profile = () => {
                     <i className="ni education_hat mr-2" />
                     University of Computer Science
                   </div>
+
                   <hr className="my-4" />
                   <p>
                     Ryan — the name taken by Melbourne-raised, Brooklyn-based
-                    Nick Murphy — writes, performs and records all of his own
-                    music.
                   </p>
-                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    Show more
-                  </a>
                 </div>
               </CardBody>
             </Card>
@@ -433,7 +432,7 @@ const Profile = () => {
                           className="form-control-label"
                           htmlFor="input-last-name"
                         >
-                          Last name
+                          Confirm Password
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -481,88 +480,85 @@ const Profile = () => {
                 </div>
               </CardBody>
             </Card>
+          </Col>
+        </Row>
+        {loading && (
+          <UncontrolledAlert className="alert-default" fade={false}>
+            <span className="alert-inner--text">
+              <strong>Loading...</strong>
+            </span>
+          </UncontrolledAlert>
+        )}
 
-            {loading && (
-              <UncontrolledAlert className="alert-default" fade={false}>
-                <span className="alert-inner--text">
-                  <strong>Loading...</strong>
-                </span>
-              </UncontrolledAlert>
-            )}
+        {/*Alertas de exito y errores*/}
+        {err && (
+          <UncontrolledAlert color="danger" fade={false}>
+            <span className="alert-inner--text">
+              <strong>Error! </strong> {err}
+            </span>
+          </UncontrolledAlert>
+        )}
 
-            {/*Alertas de exito y errores*/}
-            {err && (
-              <UncontrolledAlert color="danger" fade={false}>
-                <span className="alert-inner--text">
-                  <strong>Error! </strong> {err}
-                </span>
-              </UncontrolledAlert>
-            )}
+        {success && (
+          <UncontrolledAlert color="primary" fade={false}>
+            <span className="alert-inner--icon">
+              <i className="ni ni-like-2" />
+            </span>{" "}
+            <span className="alert-inner--text">
+              <strong>Exito! </strong> Tu informacion fue actualizada.
+            </span>
+          </UncontrolledAlert>
+        )}
 
-            {success && (
-              <UncontrolledAlert color="primary" fade={false}>
-                <span className="alert-inner--icon">
-                  <i className="ni ni-like-2" />
-                </span>{" "}
-                <span className="alert-inner--text">
-                  <strong>Exito! </strong> Tu informacion fue actualizada.
-                </span>
-              </UncontrolledAlert>
-            )}
-
-            {/*Tabla de usuarios solo para los admin*/}
-            <h2>
-              {isAdmin ? (
-                <Row className="mt-5">
-                  <div className="col">
-                    <Card className="shadow">
-                      <CardHeader className="border-0">
-                        <h3 className="mb-0">Usuarios Activos</h3>
-                      </CardHeader>
-                      <Table
-                        className="align-items-center table-flush"
-                        responsive
-                      >
-                        <thead className="thead-light">
-                          <tr>
-                            <th scope="col">Nombre Completo</th>
-                            <th scope="col">Correo Electronico</th>
-                            <th scope="col">Admin</th>
-                            <th scope="col">Acciones</th>
-                            <th scope="col" />
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {users.map((user) => (
-                            <tr key={user._id}>
-                              <th scope="row">
-                                <Media className="align-items-center">
-                                  <a
-                                    className="avatar rounded-circle mr-3"
-                                    href="#pablo"
-                                    onClick={(e) => e.preventDefault()}
-                                  >
-                                    <img
-                                      alt="..."
-                                      src={
-                                        require("../../assets/img/theme/bootstrap.jpg")
-                                          .default
-                                      }
-                                    />
-                                  </a>
-                                  <Media>
-                                    <span className="mb-0 text-sm">
-                                      {user.name}
-                                    </span>
-                                  </Media>
-                                </Media>
-                              </th>
-                              <td>{user.email}</td>
-                              <td>
-                                {user.role === 1 ? <p>Admin</p> : <p>User</p>}
-                              </td>
-                              <td className="text-right">
-                                {/*
+        {/*Tabla de usuarios solo para los admin*/}
+        <h2>
+          {isAdmin ? (
+            <Row className="mt-5">
+              <div className="col">
+                <Card className="shadow">
+                  <CardHeader className="border-0">
+                    <h3 className="mb-0">Usuarios Activos</h3>
+                  </CardHeader>
+                  <Table className="align-items-center table-flush" responsive>
+                    <thead className="thead-light">
+                      <tr>
+                        <th scope="col">Nombre Completo</th>
+                        <th scope="col">Correo Electronico</th>
+                        <th scope="col">Admin</th>
+                        <th scope="col">Acciones</th>
+                        <th scope="col" />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((user) => (
+                        <tr key={user._id}>
+                          <th scope="row">
+                            <Media className="align-items-center">
+                              <img
+                                className="avatar rounded-circle mr-3"
+                                alt="..."
+                                src={user.avatar}
+                              />
+                              <Media>
+                                <span className="mb-0 text-sm">
+                                  {user.name}
+                                </span>
+                              </Media>
+                            </Media>
+                          </th>
+                          <td>{user.email}</td>
+                          <td>
+                            <Badge color="" className="badge-dot mr-4">
+                              {user.role === 1 ? (
+                                <i className="bg-success" />
+                              ) : (
+                                <i className="bg-danger" />
+                              )}
+                              {user.role === 1 ? "Admin" : "User"}
+                            </Badge>
+                          </td>
+                          <td className="text-right">
+                            {/*
                                 <UncontrolledDropdown>
                                   <DropdownToggle
                                     className="btn-icon-only text-light"
@@ -592,32 +588,32 @@ const Profile = () => {
 
 */}
 
-                                <Button
-                                  onClick={() => {
-                                    setUserId(user._id);
-                                    setEditModalState(!editModalState);
-                                  }}
-                                  color="primary"
-                                  type="button"
-                                  size="sm"
-                                >
-                                  Editar
-                                </Button>
-                                <Button
-                                  onClick={() => {
-                                    setUserId(user._id);
-                                    setModalState(!modalState);
-                                  }}
-                                  color="danger"
-                                  type="button"
-                                  size="sm"
-                                >
-                                  Borrar
-                                </Button>
-                              </td>
-                            </tr>
-                          ))}
-                          {/*
+                            <Button
+                              onClick={() => {
+                                setUserId(user._id);
+                                setEditModalState(!editModalState);
+                              }}
+                              color="primary"
+                              type="button"
+                              size="sm"
+                            >
+                              Editar
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setUserId(user._id);
+                                setModalState(!modalState);
+                              }}
+                              color="danger"
+                              type="button"
+                              size="sm"
+                            >
+                              Borrar
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                      {/*
                       <tr>
                         <td>$2,500 USD</td>
                         <td>
@@ -663,67 +659,65 @@ const Profile = () => {
 
                       </tr>
 */}
-                        </tbody>
-                      </Table>
-                      <CardFooter className="py-4">
-                        <nav aria-label="...">
-                          <Pagination
-                            className="pagination justify-content-end mb-0"
-                            listClassName="justify-content-end mb-0"
+                    </tbody>
+                  </Table>
+                  <CardFooter className="py-4">
+                    <nav aria-label="...">
+                      <Pagination
+                        className="pagination justify-content-end mb-0"
+                        listClassName="justify-content-end mb-0"
+                      >
+                        <PaginationItem className="disabled">
+                          <PaginationLink
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                            tabIndex="-1"
                           >
-                            <PaginationItem className="disabled">
-                              <PaginationLink
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                                tabIndex="-1"
-                              >
-                                <i className="fas fa-angle-left" />
-                                <span className="sr-only">Previous</span>
-                              </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem className="active">
-                              <PaginationLink
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                1
-                              </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                              <PaginationLink
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                2 <span className="sr-only">(current)</span>
-                              </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                              <PaginationLink
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                3
-                              </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                              <PaginationLink
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                <i className="fas fa-angle-right" />
-                                <span className="sr-only">Next</span>
-                              </PaginationLink>
-                            </PaginationItem>
-                          </Pagination>
-                        </nav>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                </Row>
-              ) : null}
-            </h2>
-          </Col>
-        </Row>
+                            <i className="fas fa-angle-left" />
+                            <span className="sr-only">Previous</span>
+                          </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem className="active">
+                          <PaginationLink
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            1
+                          </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationLink
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            2 <span className="sr-only">(current)</span>
+                          </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationLink
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            3
+                          </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationLink
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-angle-right" />
+                            <span className="sr-only">Next</span>
+                          </PaginationLink>
+                        </PaginationItem>
+                      </Pagination>
+                    </nav>
+                  </CardFooter>
+                </Card>
+              </div>
+            </Row>
+          ) : null}
+        </h2>
       </Container>
     </>
   );

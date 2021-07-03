@@ -112,7 +112,7 @@ const Admin = (props) => {
         routes={newRoutes}
         logo={{
           innerLink: "/admin/index",
-          imgSrc: require("../assets/img/brand/argon-react.png").default,
+          imgSrc: require("../assets/img/brand/logo.png").default,
           imgAlt: "...",
         }}
       />

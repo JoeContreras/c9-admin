@@ -114,6 +114,7 @@ const Header = () => {
                   </CardBody>
                 </Card>
               </Col>
+              {/*
               <Col lg="6" xl="3">
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
@@ -142,6 +143,8 @@ const Header = () => {
                   </CardBody>
                 </Card>
               </Col>
+
+*/}
             </Row>
           </div>
         </Container>

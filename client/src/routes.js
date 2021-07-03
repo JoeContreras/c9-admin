@@ -25,6 +25,7 @@ import Icons from "views/examples/Icons.js";
 import Activate from "./views/examples/Activate";
 import ForgotPassword from "./views/examples/ForgotPassword";
 import ResetPassword from "./views/examples/ResetPassword";
+import Citas from "./views/examples/Citas";
 
 var routes = [
   {
@@ -81,6 +82,13 @@ var routes = [
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
     component: Tables,
+    layout: "/admin",
+  },
+  {
+    path: "/adminCitas",
+    name: "Citas",
+    icon: "ni ni-key-25 text-info",
+    component: Citas,
     layout: "/admin",
   },
   {
