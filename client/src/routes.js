@@ -26,6 +26,7 @@ import Activate from "./views/examples/Activate";
 import ForgotPassword from "./views/examples/ForgotPassword";
 import ResetPassword from "./views/examples/ResetPassword";
 import Citas from "./views/examples/Citas";
+import Clientes from "./views/examples/Clientes";
 
 var routes = [
   {
@@ -104,6 +105,13 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: Register,
     layout: "/auth",
+  },
+  {
+    path: "/adminClientes",
+    name: "Clientes",
+    icon: "ni ni-circle-08 text-pink",
+    component: Clientes,
+    layout: "/admin",
   },
 ];
 export default routes;

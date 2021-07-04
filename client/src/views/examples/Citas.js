@@ -245,7 +245,7 @@ const Citas = () => {
               </CardHeader>
               <CardBody>
                 <h6 className="heading-small text-muted mb-4">
-                  User information
+                  Informacion de Cita
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -270,26 +270,6 @@ const Citas = () => {
                       </FormGroup>
                     </Col>
                     <Col lg="6">
-                      {/*
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-email"
-                        >
-                          Fecha de la cita
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-email"
-                          type="text"
-                          name="fecha"
-                          value={fecha}
-                          placeholder="Fecha de la Cita"
-                          onChange={handleChange}
-                        />
-                      </FormGroup>
-
-*/}
                       <FormGroup>
                         <label
                           className="form-control-label"
