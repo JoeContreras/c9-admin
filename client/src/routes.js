@@ -27,6 +27,7 @@ import ForgotPassword from "./views/examples/ForgotPassword";
 import ResetPassword from "./views/examples/ResetPassword";
 import Citas from "./views/examples/Citas";
 import Clientes from "./views/examples/Clientes";
+import "@fortawesome/fontawesome-free";
 
 var routes = [
   {
@@ -88,7 +89,7 @@ var routes = [
   {
     path: "/adminCitas",
     name: "Citas",
-    icon: "ni ni-key-25 text-info",
+    icon: "fas fa-calendar-check text-blue",
     component: Citas,
     layout: "/admin",
   },
@@ -109,7 +110,7 @@ var routes = [
   {
     path: "/adminClientes",
     name: "Clientes",
-    icon: "ni ni-circle-08 text-pink",
+    icon: "fas fa-users text-red",
     component: Clientes,
     layout: "/admin",
   },

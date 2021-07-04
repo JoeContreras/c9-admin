@@ -38,8 +38,9 @@ const Admin = (props) => {
   const token = useSelector((state) => state.token);
   const auth = useSelector((state) => state.auth);
 
+  console.log(routes);
   const newRoutes = [...routes];
-  const removeValFromIndex = [1, 2, 3];
+  const removeValFromIndex = [1, 2, 3, 4, 5, 7, 9, 10];
 
   for (let i = removeValFromIndex.length - 1; i >= 0; i--)
     newRoutes.splice(removeValFromIndex[i], 1);
