@@ -432,7 +432,7 @@ const Citas = () => {
                             <Media>
                               <span className="mb-0 text-sm">
                                 {moment(cita.fecha).format(
-                                  "MMMM Do YYYY, h:mm:ss a"
+                                  "MMMM Do YYYY, h:mm a"
                                 )}
                               </span>
                             </Media>

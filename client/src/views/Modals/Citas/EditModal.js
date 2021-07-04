@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReactDatetime from "react-datetime";
 import {
   UncontrolledAlert,
   Button,
@@ -14,10 +15,11 @@ import {
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { isPhone } from "../../../components/utils/validation/Validation";
+import moment from "moment";
 
 const initialState = {
   nombre: "",
-  fecha: "",
+  fecha: new Date(),
   lugar: "",
   telefono: "",
   err: "",
@@ -50,6 +52,9 @@ const EditModal = (props) => {
     setNewCita({ ...newCita, [name]: value, err: "", success: "" });
   };
 
+  const handleDate = (date) => {
+    setNewCita({ ...newCita, fecha: date });
+  };
   const handleUpdate = async () => {
     if (!isPhone(telefono)) {
       return setNewCita({
@@ -109,14 +114,19 @@ const EditModal = (props) => {
               <InputGroup className="input-group-alternative">
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>
-                    <i className="ni ni-lock-circle-open" />
+                    <i className="ni ni-calendar-grid-58" />
                   </InputGroupText>
                 </InputGroupAddon>
-                <Input
-                  name="fecha"
-                  id="fecha"
-                  defaultValue={editCita.fecha}
-                  onChange={handleChange}
+                <ReactDatetime
+                  /*initialValue={moment(editCita.fecha).format(
+                    "MMMM Do YYYY, h:mm a"
+                  )}*/
+                  onChange={handleDate}
+                  inputProps={{
+                    placeholder: "Fecha de Cita",
+                    autoComplete: "off",
+                  }}
+                  timeFormat={true}
                 />
               </InputGroup>
             </FormGroup>
