@@ -11,7 +11,7 @@ function ProtectedRoute({ component: Component, ...restOfProps }) {
     <Route
       {...restOfProps}
       render={(props) =>
-        isLogged ? <AdminLayout {...props} /> : <Redirect to="/login" />
+        isLogged ? <AdminLayout {...props} /> : <Redirect to="/auth/login" />
       }
     />
   );

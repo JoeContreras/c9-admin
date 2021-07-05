@@ -144,7 +144,7 @@ const Login = () => {
             </div>
             <div className="btn-wrapper text-center">
               <FacebookLogin
-                appId="937021713532051"
+                appId="302901791552183"
                 autoLoad={false}
                 fields="name,email,picture"
                 callback={responseFacebook}

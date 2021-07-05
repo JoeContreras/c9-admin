@@ -43,6 +43,14 @@ import {
 import DeleteModal from "../Modals/DeleteModal";
 import EditModal from "../Modals/EditModal";
 import { dispatchGetUser, fetchUser } from "../../redux/actions/authAction";
+import {
+  dispatchGetAllClientes,
+  fetchAllClientes,
+} from "../../redux/actions/clientesAction";
+import {
+  dispatchGetAllCitas,
+  fetchAllCitas,
+} from "../../redux/actions/citaAction";
 
 const initialState = {
   name: "",
@@ -68,6 +76,18 @@ const Profile = () => {
   const [userId, setUserId] = useState("");
 
   const dispatch = useDispatch();
+  useEffect(() => {
+    fetchAllClientes(token).then((res) => {
+      dispatch(dispatchGetAllClientes(res));
+    });
+  }, [token, dispatch]);
+
+  useEffect(() => {
+    fetchAllCitas(token).then((res) => {
+      dispatch(dispatchGetAllCitas(res));
+    });
+  }, [token, dispatch]);
+
   useEffect(() => {
     fetchUser(token).then((res) => {
       dispatch(dispatchGetUser(res));
