@@ -26,12 +26,13 @@ import "assets/scss/argon-dashboard-react.scss";
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 import DataProvider from "./redux/dataProvider";
+import ProtectedRoute from "./ProtectedRoute";
 
 ReactDOM.render(
   <DataProvider>
     <BrowserRouter>
       <Switch>
-        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        <ProtectedRoute path="/admin" />
         <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
         <Redirect from="/" to="/auth/login" />
       </Switch>

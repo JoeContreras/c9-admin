@@ -55,20 +55,24 @@ const EditModal = (props) => {
   };
 
   const handleUpdate = async () => {
-    if (!isEmail(correo)) {
-      return setNewCliente({
-        ...newCliente,
-        err: "Please enter a valid email address",
-        success: "",
-      });
+    if (correo) {
+      if (!isEmail(correo)) {
+        return setNewCliente({
+          ...newCliente,
+          err: "Please enter a valid email address",
+          success: "",
+        });
+      }
     }
 
-    if (!isPhone(telefono)) {
-      return setNewCliente({
-        ...newCliente,
-        err: "Please enter a valid phone number",
-        success: "",
-      });
+    if (telefono) {
+      if (!isPhone(telefono)) {
+        return setNewCliente({
+          ...newCliente,
+          err: "Please enter a valid phone number",
+          success: "",
+        });
+      }
     }
     try {
       const res = await axios.patch(

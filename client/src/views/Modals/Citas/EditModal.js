@@ -56,12 +56,14 @@ const EditModal = (props) => {
     setNewCita({ ...newCita, fecha: date });
   };
   const handleUpdate = async () => {
-    if (!isPhone(telefono)) {
-      return setNewCita({
-        ...newCita,
-        err: "Please enter a valid phone number",
-        success: "",
-      });
+    if (telefono) {
+      if (!isPhone(telefono)) {
+        return setNewCita({
+          ...newCita,
+          err: "Please enter a valid phone number",
+          success: "",
+        });
+      }
     }
     try {
       await axios.patch(
@@ -121,6 +123,8 @@ const EditModal = (props) => {
                   /*initialValue={moment(editCita.fecha).format(
                     "MMMM Do YYYY, h:mm a"
                   )}*/
+                  initialValue={editCita.fecha}
+                  value={fecha}
                   onChange={handleDate}
                   inputProps={{
                     placeholder: "Fecha de Cita",
