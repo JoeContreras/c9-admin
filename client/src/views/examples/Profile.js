@@ -439,6 +439,7 @@ const Profile = () => {
                         <Input
                           className="form-control-alternative"
                           type="password"
+                          name="password"
                           id="input-first-name"
                           placeholder="Your password"
                           value={password}
@@ -458,6 +459,7 @@ const Profile = () => {
                           className="form-control-alternative"
                           id="input-last-name"
                           name="cf_password"
+                          type="password"
                           placeholder="Confirm Password"
                           value={cf_password}
                           onChange={handleChange}

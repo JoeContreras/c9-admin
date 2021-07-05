@@ -48,9 +48,9 @@ const ForgotPassword = () => {
     <>
       <Col lg="6" md="8">
         {success && (
-          <UncontrolledAlert className="alert-default" fade={false}>
+          <UncontrolledAlert color="success" fade={false}>
             <span className="alert-inner--text">
-              <strong>Success!</strong> {success}
+              <strong>Success!</strong> An email has been sent to you account
             </span>
           </UncontrolledAlert>
         )}
