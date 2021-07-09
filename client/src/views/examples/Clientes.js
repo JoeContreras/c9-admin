@@ -100,7 +100,14 @@ const Citas = () => {
           },
         }
       );
-      setData({ ...data, err: "", success: res.data.msg });
+      setData({
+        nombre: "",
+        nombreEmpresa: "",
+        correo: "",
+        telefono: "",
+        err: "",
+        success: res.data.msg,
+      });
       setCallback(!callback);
     } catch (e) {
       setData({ ...data, err: e.response.data.msg, success: "" });

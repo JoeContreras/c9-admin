@@ -1,4 +1,6 @@
 const Users = require("../models/userModel");
+const Cliente = require("../models/clienteModel");
+const Cita = require("../models/citaModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendMail = require("./sendMail");
@@ -209,6 +211,8 @@ const UserCtrl = {
   deleteUser: async (req, res) => {
     try {
       await Users.findByIdAndDelete(req.params.id);
+      await Cliente.deleteMany({ owner: req.params.id });
+      await Cita.deleteMany({ owner: req.params.id });
       res.json({ msg: "User deleted" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
