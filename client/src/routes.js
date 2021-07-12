@@ -28,6 +28,7 @@ import ResetPassword from "./views/examples/ResetPassword";
 import Citas from "./views/examples/Citas";
 import Clientes from "./views/examples/Clientes";
 import "@fortawesome/fontawesome-free";
+import Chat from "./views/examples/Chat/Chat";
 
 var routes = [
   {
@@ -112,6 +113,13 @@ var routes = [
     name: "Clientes",
     icon: "fas fa-users text-red",
     component: Clientes,
+    layout: "/admin",
+  },
+  {
+    path: "/adminChat",
+    name: "Chat",
+    icon: "fas fa-comments text-purple",
+    component: Chat,
     layout: "/admin",
   },
 ];

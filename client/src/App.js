@@ -10,7 +10,7 @@ import {
   fetchUser,
 } from "./redux/actions/authAction";
 
-function App() {
+function Chat() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const auth = useSelector((state) => state.auth);
