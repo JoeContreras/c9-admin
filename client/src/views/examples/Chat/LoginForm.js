@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const projectID = "59a02fcf-f543-4b5d-a7ff-f517a30cd486";
 
@@ -7,6 +8,8 @@ const Modal = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,8 +27,8 @@ const Modal = () => {
 
       localStorage.setItem("username", username);
       localStorage.setItem("password", password);
+      history.push("/admin/adminChat");
 
-      window.location.reload();
       setError("");
     } catch (err) {
       setError("Oops, incorrect credentials.");
