@@ -22,15 +22,22 @@ import {
   PaginationLink,
   Table,
   UncontrolledAlert,
+  Form,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
 } from "reactstrap";
 import axios from "axios";
 import Header from "../../components/Headers/Header";
 import {
   dispatchGetAllClientes,
+  dispatchGetClienteSearch,
   fetchAllClientes,
+  fetchClienteSearch,
 } from "../../redux/actions/clientesAction";
 import DeleteModal from "../Modals/Clientes/DeleteModal";
 import EditModal from "../Modals/Clientes/EditModal";
+import { useHistory } from "react-router-dom";
 
 const initialState = {
   nombre: "",
@@ -46,10 +53,12 @@ const Citas = () => {
   const citas = useSelector((state) => state.citas);
   const auth = useSelector((state) => state.auth);
 
+  const history = useHistory();
   const { user } = auth;
 
   const [data, setData] = useState(initialState);
   const { nombre, nombreEmpresa, correo, telefono, err, success } = data;
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
   const [clienteId, setClienteId] = useState("");
@@ -149,6 +158,27 @@ const Citas = () => {
         token={token}
       />
     );
+  };
+
+  const searchPost = () => {
+    if (search.trim()) {
+      //  redux search logic
+      fetchClienteSearch(token, search).then((res) => {
+        dispatch(dispatchGetClienteSearch(res));
+      });
+      // dispatch(getPostsBySearch({ search}));
+      // history.push(`/posts/search?nombre=${search || "none"}`);
+    } else {
+      history.push("/");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      //  search logic
+      searchPost();
+    }
   };
   return (
     <>
@@ -381,7 +411,27 @@ const Citas = () => {
             <div className="col">
               <Card className="bg-default shadow">
                 <CardHeader className="bg-transparent border-0">
-                  <h3 className="text-white mb-0">Clientes</h3>
+                  {/*<h3 className="text-white mb-0 text-right">Clientes</h3>*/}
+                  <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                    <FormGroup className="mb-0">
+                      <InputGroup className="input-group-alternative">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="fas fa-search" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          placeholder="Search"
+                          type="text"
+                          value={search}
+                          onKeyDown={handleKeyPress}
+                          onChange={(e) => {
+                            setSearch(e.target.value);
+                          }}
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                  </Form>
                 </CardHeader>
                 <Table
                   className="align-items-center table-dark table-flush"

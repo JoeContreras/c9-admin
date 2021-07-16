@@ -1,4 +1,4 @@
-# Getting Started with Create React Chat
+# Getting Started with Create React Chant
 
 This project was bootstrapped with [Create React Chat](https://github.com/facebook/create-react-app).
 
