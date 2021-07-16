@@ -2,7 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import {
   dispatchGetAllCitas,
+  dispatchGetCitasSearch,
   fetchAllCitas,
+  fetchCitasSearch,
 } from "../../redux/actions/citaAction";
 import { isPhone } from "../../components/utils/validation/Validation";
 import ReactDatetime from "react-datetime";
@@ -33,11 +35,17 @@ import {
   Table,
   UncontrolledTooltip,
   UncontrolledAlert,
+  Form,
 } from "reactstrap";
 import axios from "axios";
 import Header from "../../components/Headers/Header";
 import DeleteModal from "../Modals/Citas/DeleteModal";
 import EditModal from "../Modals/Citas/EditModal";
+import {
+  dispatchGetClienteSearch,
+  fetchClienteSearch,
+} from "../../redux/actions/clientesAction";
+import { useHistory } from "react-router-dom";
 
 const initialState = {
   nombre: "",
@@ -61,8 +69,10 @@ const Citas = () => {
   const { nombre, fecha, lugar, telefono, err, success } = data;
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
+  const [search, setSearch] = useState("");
 
   const dispatch = useDispatch();
+  const history = useHistory();
   useEffect(() => {
     fetchAllCitas(token).then((res) => {
       dispatch(dispatchGetAllCitas(res));
@@ -150,6 +160,25 @@ const Citas = () => {
       />
     );
   };
+
+  const searchPost = () => {
+    if (search.trim()) {
+      //  redux search logic
+      fetchCitasSearch(token, search).then((res) => {
+        dispatch(dispatchGetCitasSearch(res));
+      });
+    } else {
+      history.push("/");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      //  search logic
+      searchPost();
+    }
+  };
   return (
     <>
       <Header />
@@ -177,9 +206,11 @@ const Citas = () => {
                   </div>
                 </Col>
               </Row>
+
               <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                 <div className="d-flex justify-content-between"></div>
               </CardHeader>
+
               <CardBody className="pt-0 pt-md-4">
                 <Row>
                   <div className="col">
@@ -385,9 +416,46 @@ const Citas = () => {
           <Row className="mt-5">
             <div className="col">
               <Card className="bg-default shadow">
+                {/*
                 <CardHeader className="bg-transparent border-0">
                   <h3 className="text-white mb-0">Citas</h3>
                 </CardHeader>
+*/}
+                <CardHeader className="bg-transparent border-0">
+                  <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                    <FormGroup className="mb-0">
+                      <InputGroup className="input-group-alternative">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="fas fa-search" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          placeholder="Search"
+                          type="text"
+                          value={search}
+                          onKeyDown={handleKeyPress}
+                          onChange={(e) => {
+                            setSearch(e.target.value);
+                          }}
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                    <Col className="text-right" xs="9">
+                      <Button
+                        color="primary"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCallback(!callback);
+                        }}
+                        size="sm"
+                      >
+                        Todas las Citas
+                      </Button>
+                    </Col>
+                  </Form>
+                </CardHeader>
+
                 <Table
                   className="align-items-center table-dark table-flush"
                   responsive

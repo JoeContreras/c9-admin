@@ -80,6 +80,25 @@ const UserCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
+  fetchSearch: async (req, res) => {
+    const { searchQuery } = req.query;
+    try {
+      const nombre = new RegExp(searchQuery, "i");
+      // const users = await Users.find({ nombre });
+      const users = await Users.find({
+        $and: [{ name: nombre }],
+      }).select("-password");
+      /*
+      const clientes = await Users.find({
+        $and: [{ nombre }, { owner: req.user.id }],
+      });
+*/
+
+      res.status(200).json(users);
+    } catch (err) {
+      return res.status(400).json({ msg: err.message });
+    }
+  },
   login: async (req, res) => {
     try {
       const { email, password } = req.body;

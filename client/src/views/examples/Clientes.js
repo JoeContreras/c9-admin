@@ -26,6 +26,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
+  Badge,
 } from "reactstrap";
 import axios from "axios";
 import Header from "../../components/Headers/Header";
@@ -431,8 +432,21 @@ const Citas = () => {
                         />
                       </InputGroup>
                     </FormGroup>
+                    <Col className="text-right" xs="9">
+                      <Button
+                        color="primary"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCallback(!callback);
+                        }}
+                        size="sm"
+                      >
+                        Todos los Clientes
+                      </Button>
+                    </Col>
                   </Form>
                 </CardHeader>
+
                 <Table
                   className="align-items-center table-dark table-flush"
                   responsive

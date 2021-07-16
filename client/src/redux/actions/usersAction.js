@@ -14,3 +14,19 @@ export const dispatchGetAllUsers = (res) => {
     payload: res.data,
   };
 };
+export const fetchUsersSearch = async (token, searchQuery) => {
+  const res = await axios.get(
+    `/user/search?searchQuery=${searchQuery || "none"}`,
+    {
+      headers: { Authorization: token },
+    }
+  );
+  return res;
+};
+
+export const dispatchGetUsersSearch = (res) => {
+  return {
+    type: ACTIONS.SEARCH_USERS,
+    payload: res.data,
+  };
+};

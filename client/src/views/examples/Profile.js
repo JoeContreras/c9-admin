@@ -26,6 +26,9 @@ import {
   Table,
   UncontrolledTooltip,
   UncontrolledAlert,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
 } from "reactstrap";
 
 // core components
@@ -33,7 +36,9 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { useDispatch, useSelector } from "react-redux";
 import {
   dispatchGetAllUsers,
+  dispatchGetUsersSearch,
   fetchAllUsers,
+  fetchUsersSearch,
 } from "../../redux/actions/usersAction";
 import axios from "axios";
 import {
@@ -45,12 +50,15 @@ import EditModal from "../Modals/EditModal";
 import { dispatchGetUser, fetchUser } from "../../redux/actions/authAction";
 import {
   dispatchGetAllClientes,
+  dispatchGetClienteSearch,
   fetchAllClientes,
+  fetchClienteSearch,
 } from "../../redux/actions/clientesAction";
 import {
   dispatchGetAllCitas,
   fetchAllCitas,
 } from "../../redux/actions/citaAction";
+import { useHistory } from "react-router-dom";
 
 const initialState = {
   name: "",
@@ -74,7 +82,9 @@ const Profile = () => {
   const [modalState, setModalState] = useState(false);
   const [editModalState, setEditModalState] = useState(false);
   const [userId, setUserId] = useState("");
+  const [search, setSearch] = useState("");
 
+  const history = useHistory();
   const dispatch = useDispatch();
   useEffect(() => {
     fetchAllClientes(token).then((res) => {
@@ -249,6 +259,26 @@ const Profile = () => {
     }
   };
 
+  const searchPost = () => {
+    if (search.trim()) {
+      //  redux search logic
+      fetchUsersSearch(token, search).then((res) => {
+        dispatch(dispatchGetUsersSearch(res));
+      });
+      // dispatch(getPostsBySearch({ search}));
+      // history.push(`/posts/search?nombre=${search || "none"}`);
+    } else {
+      history.push("/");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      //  search logic
+      searchPost();
+    }
+  };
   return (
     <>
       <UserHeader personName={user.name} />
@@ -538,9 +568,47 @@ const Profile = () => {
             <Row className="mt-5">
               <div className="col">
                 <Card className="shadow">
+                  {/*
                   <CardHeader className="border-0">
                     <h3 className="mb-0">Usuarios Activos</h3>
                   </CardHeader>
+*/}
+                  <CardHeader className="bg-transparent border-0">
+                    {/*<h3 className="text-white mb-0 text-right">Clientes</h3>*/}
+                    <Form className="navbar-search navbar-search-light form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                      <FormGroup className="mb-0">
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="fas fa-search" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder="Search"
+                            type="text"
+                            value={search}
+                            onKeyDown={handleKeyPress}
+                            onChange={(e) => {
+                              setSearch(e.target.value);
+                            }}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                      <Col className="text-right" xs="9">
+                        <Button
+                          color="default"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setCallback(!callback);
+                          }}
+                          size="sm"
+                        >
+                          Todos los Usuarios
+                        </Button>
+                      </Col>
+                    </Form>
+                  </CardHeader>
+
                   <Table className="align-items-center table-flush" responsive>
                     <thead className="thead-light">
                       <tr>
