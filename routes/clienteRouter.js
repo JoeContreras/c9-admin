@@ -8,6 +8,8 @@ router.patch("/clientes/:id", auth, ClienteCtrl.update);
 
 router.get("/clientes", auth, ClienteCtrl.fetchMany);
 
+router.get("/clientes/search", auth, ClienteCtrl.fetchSearch);
+
 router.get("/clientes/:id", auth, ClienteCtrl.fetchOne);
 
 router.delete("/clientes/:id", auth, ClienteCtrl.delete);

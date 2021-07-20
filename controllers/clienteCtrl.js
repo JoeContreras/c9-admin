@@ -21,6 +21,19 @@ const ClienteCtrl = {
       return res.status(400).json({ msg: err.message });
     }
   },
+  fetchSearch: async (req, res) => {
+    const { searchQuery } = req.query;
+    try {
+      const nombre = new RegExp(searchQuery, "i");
+      const clientes = await Cliente.find({
+        $and: [{ nombre }, { owner: req.user.id }],
+      });
+      // const clientes = await Cliente.find({ owner: req.user.id });
+      res.status(200).json(clientes);
+    } catch (err) {
+      return res.status(400).json({ msg: err.message });
+    }
+  },
   delete: async (req, res) => {
     try {
       const cliente = await Cliente.findOneAndDelete({

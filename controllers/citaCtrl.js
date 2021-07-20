@@ -22,6 +22,18 @@ const CitaCtrl = {
       return res.status(400).json({ msg: err.message });
     }
   },
+  fetchSearch: async (req, res) => {
+    const { searchQuery } = req.query;
+    try {
+      const nombre = new RegExp(searchQuery, "i");
+      const citas = await Cita.find({
+        $and: [{ nombre }, { owner: req.user.id }],
+      });
+      res.status(200).json(citas);
+    } catch (err) {
+      return res.status(400).json({ msg: err.message });
+    }
+  },
   delete: async (req, res) => {
     try {
       const cita = await Cita.findOneAndDelete({
