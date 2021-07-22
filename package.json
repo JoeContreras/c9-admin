@@ -6,12 +6,16 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
+    "test": "jest --watch --runInBand",
     "client": "cd client && yarn run start",
     "server-install": "yarn",
     "client-install": "cd client && yarn",
     "install-all": "concurrently \"yarn run server-install\" \"yarn run client-install\"",
     "dev": "concurrently \"yarn run server\" \"yarn run client\"",
     "heroku-postbuild": "cd client && yarn && yarn run build"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +36,8 @@
     "nodemailer": "^6.6.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "jest": "^27.0.6",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.4"
   }
 }
