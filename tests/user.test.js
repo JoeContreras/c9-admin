@@ -10,6 +10,7 @@ const {
 } = require("./fixtures/db");
 
 beforeEach(setupDataBase);
+
 test("Debe permitir el login de un usuario existente", async () => {
   const response = await request(app)
     .post("/user/loginTest")
@@ -23,7 +24,7 @@ test("Debe permitir el login de un usuario existente", async () => {
   expect(response.body.msg).toBe("Login success!");
 });
 
-test("Debe rechazar el login de un usuario no existente", async () => {
+test("Debe rechazar el login de un usuario con contraseña incorrecta", async () => {
   await request(app)
     .post("/user/loginTest")
     .send({
@@ -44,7 +45,9 @@ test("Debe permitir obtener informacion del usuario", async () => {
     .send()
     .expect(200);
 
-  expect(res.body.user).not.toBeNull();
+  expect(res.body._id).toBe(userOneId.toString());
+  expect(res.body.name).toEqual("joe c");
+  expect(res.body.email).toEqual("contreras.joe098@gmail.com");
 });
 
 test("Administrador debe poder borrar cuentas de usuario", async () => {
@@ -57,7 +60,6 @@ test("Administrador debe poder borrar cuentas de usuario", async () => {
     .set("Authorization", `${response.body.newToken}`)
     .send()
     .expect(200);
-
   //assert that user was deleted from the database
   const user = await User.findById(userTwoId);
   expect(user).toBeNull();
@@ -73,7 +75,36 @@ test("Usuario sin permisos de admin no puede borrar cuentas de otros usuarios", 
     .delete(`/user/delete/${userTwoId}`)
     .set("Authorization", `${response.body.newToken}`)
     .send()
-    .expect(500);
+    .expect(401);
+});
+
+test("Debe permitir actualizacion de usuario", async () => {
+  const response = await request(app).post("/user/loginTest").send({
+    email: userTwo.email,
+    password: userTwo.password,
+  });
+
+  await request(app)
+    .patch("/user/update")
+    .set("Authorization", `${response.body.newToken}`)
+    .send({
+      name: "daniel",
+    })
+    .expect(200);
+
+  const user = await User.findById(userTwoId);
+  expect(user.name).toBe("daniel");
+});
+test("Usuario no puede actualizar informacion sin autenticacion", async () => {
+  await request(app)
+    .patch("/user/update")
+    .set("Authorization", ``)
+    .send({
+      name: "daniel",
+    })
+    .expect(401);
+  const user = await User.findById(userTwoId);
+  expect(user.name).toBe("david rodriguez");
 });
 
 /*

@@ -5,17 +5,6 @@ const Cliente = require("../../models/clienteModel");
 const bcrypt = require("bcrypt");
 
 const userOneId = new mongoose.Types.ObjectId();
-/*
-const password = "testing";
-const hashPass = async (pass) => {
-  return await bcrypt.hash(pass, 12);
-};
-const passwordHashOne = hashPass(password).then((hash) => {
-  const passwordHashOne = hash;
-  return passwordHashOne;
-});
-
-*/
 const userOne = {
   _id: userOneId,
   name: "joe c",

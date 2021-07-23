@@ -6,13 +6,13 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
-    "test": "jest --watch --runInBand",
     "client": "cd client && yarn run start",
     "server-install": "yarn",
     "client-install": "cd client && yarn",
     "install-all": "concurrently \"yarn run server-install\" \"yarn run client-install\"",
     "dev": "concurrently \"yarn run server\" \"yarn run client\"",
-    "heroku-postbuild": "cd client && yarn && yarn run build"
+    "heroku-postbuild": "cd client && yarn && yarn run build",
+    "test": "jest --watch --runInBand"
   },
   "jest": {
     "testEnvironment": "node"
