@@ -174,7 +174,7 @@ const Register = () => {
             </div>
             <div className="text-center">
               <FacebookLogin
-                appId="302901791552183"
+                appId="937021713532051"
                 autoLoad={false}
                 fields="name,email,picture"
                 callback={responseFacebook}
