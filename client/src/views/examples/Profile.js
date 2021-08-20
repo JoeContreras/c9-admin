@@ -520,10 +520,7 @@ const Profile = () => {
                       <div className="text-right">
                         <Button
                           disabled={loading}
-                          onClick={() => {
-                            setCallback(!callback);
-                            handleUpdate();
-                          }}
+                          onClick={handleUpdate}
                           color="primary"
                           type="submit"
                         >
