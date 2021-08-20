@@ -524,7 +524,7 @@ const Profile = () => {
                           color="primary"
                           type="submit"
                         >
-                          Actualizar
+                          Actualizar Perfil
                         </Button>
                       </div>
                     </Col>
