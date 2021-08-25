@@ -28,10 +28,10 @@ const Header = () => {
             <Link to="/profile">Profile</Link>
           </li>
           <li>
-            <Link to="/adminClientes">Administrar Clientes</Link>
+            <Link to="/adminClientes">Admin Clientes</Link>
           </li>
           <li>
-            <Link to="/adminCitas">Administrar Citas</Link>
+            <Link to="/adminCitas">Admin Citas</Link>
           </li>
           <li>
             <Link to="/" onClick={handleLogout}>

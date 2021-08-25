@@ -102,6 +102,11 @@ const UserCtrl = {
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
+      if (!email)
+        return res.status(400).json({ msg: "Please provide an email." });
+      if (!password)
+        return res.status(400).json({ msg: "Please provide a password." });
+
       const user = await Users.findOne({ email });
       if (!user)
         return res.status(400).json({ msg: "This email does not exist." });
