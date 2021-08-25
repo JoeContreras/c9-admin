@@ -10,7 +10,7 @@ const citaSchema = new mongoose.Schema(
     fecha: {
       required: true,
       trim: true,
-      type: String,
+      type: Date,
     },
     lugar: {
       required: true,

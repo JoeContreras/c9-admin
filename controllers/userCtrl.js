@@ -1,4 +1,6 @@
 const Users = require("../models/userModel");
+const Cliente = require("../models/clienteModel");
+const Cita = require("../models/citaModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendMail = require("./sendMail");
@@ -41,7 +43,7 @@ const UserCtrl = {
 
       const activation_token = createActivationToken(newUser);
 
-      const url = `${CLIENT_URL}/user/activate/${activation_token}`;
+      const url = `${CLIENT_URL}/auth/activate/${activation_token}`;
       sendMail(email, url, "Verify your email address");
 
       res.json({
@@ -78,9 +80,33 @@ const UserCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
+  fetchSearch: async (req, res) => {
+    const { searchQuery } = req.query;
+    try {
+      const nombre = new RegExp(searchQuery, "i");
+      // const users = await Users.find({ nombre });
+      const users = await Users.find({
+        $and: [{ name: nombre }],
+      }).select("-password");
+      /*
+      const clientes = await Users.find({
+        $and: [{ nombre }, { owner: req.user.id }],
+      });
+*/
+
+      res.status(200).json(users);
+    } catch (err) {
+      return res.status(400).json({ msg: err.message });
+    }
+  },
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
+      if (!email)
+        return res.status(400).json({ msg: "Please provide an email." });
+      if (!password)
+        return res.status(400).json({ msg: "Please provide a password." });
+
       const user = await Users.findOne({ email });
       if (!user)
         return res.status(400).json({ msg: "This email does not exist." });
@@ -124,7 +150,7 @@ const UserCtrl = {
         return res.status(400).json({ msg: "This email does not exist." });
 
       const access_token = createAccessToken({ id: user._id });
-      const url = `${CLIENT_URL}/user/reset/${access_token}`;
+      const url = `${CLIENT_URL}/auth/reset/${access_token}`;
 
       sendMail(email, url, "Reset your password");
       res.json({ msg: "Re-send the password, please check your email." });
@@ -209,6 +235,8 @@ const UserCtrl = {
   deleteUser: async (req, res) => {
     try {
       await Users.findByIdAndDelete(req.params.id);
+      await Cliente.deleteMany({ owner: req.params.id });
+      await Cita.deleteMany({ owner: req.params.id });
       res.json({ msg: "User deleted" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });

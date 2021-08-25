@@ -141,6 +141,7 @@ const Profile = () => {
     if (password) {
       updatePassword();
     }
+    setCallback(!callback);
   };
 
   const handleDelete = async (id) => {
