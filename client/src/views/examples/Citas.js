@@ -215,10 +215,12 @@ const Citas = () => {
                 <Row>
                   <div className="col">
                     <div className="card-profile-stats d-flex justify-content-center mt-md-5">
+                      {/*
                       <div>
                         <span className="heading">22</span>
                         <span className="description">Friends</span>
                       </div>
+*/}
                       <div>
                         <span className="heading">{citas.length}</span>
                         <span className="description">Citas</span>
@@ -233,19 +235,19 @@ const Citas = () => {
                 <div className="text-center">
                   <h3>
                     {user.name}
-                    <span className="font-weight-light">, 27</span>
+                    <span className="font-weight-light">, 57</span>
                   </h3>
                   <div className="h5 font-weight-300">
                     <i className="ni location_pin mr-2" />
-                    Bucharest, Romania
+                    Durango, Durango
                   </div>
                   <div className="h5 mt-4">
                     <i className="ni business_briefcase-24 mr-2" />
-                    Solution Manager - Creative Tim Officer
+                    Desarrollo Web
                   </div>
                   <div>
                     <i className="ni education_hat mr-2" />
-                    University of Computer Science
+                    Universidad Tecnologica de Durango
                   </div>
                   {/*
                   <hr className="my-4" />

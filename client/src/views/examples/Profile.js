@@ -370,24 +370,26 @@ const Profile = () => {
                 <div className="text-center">
                   <h3>
                     {user.name}
-                    <span className="font-weight-light">, 27</span>
+                    <span className="font-weight-light">, 57</span>
                   </h3>
                   <div className="h5 font-weight-300">
                     <i className="ni location_pin mr-2" />
-                    Bucharest, Romania
+                    Durango, Durango
                   </div>
                   <div className="h5 mt-4">
                     <i className="ni business_briefcase-24 mr-2" />
-                    Solution Manager - Creative Tim Officer
+                    Desarrollo Web
                   </div>
                   <div>
                     <i className="ni education_hat mr-2" />
-                    University of Computer Science
+                    Universidad Tecnologica de Durango
                   </div>
 
                   <hr className="my-4" />
                   <p>
-                    Ryan — the name taken by Melbourne-raised, Brooklyn-based
+                    Valorar a los demás como a uno mismo.
+                    <br /> Procurar siempre la correspondencia entre el ser y el
+                    hacer.
                   </p>
                 </div>
               </CardBody>
